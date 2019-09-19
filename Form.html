@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <title>FORM</title>
+  <style media="screen">
+    .window {
+	 margin: auto;
+     background: #FFF0F5;
+     border: 3px solid black;
+     font-size: 100%;
+     color: #191970;
+     padding: 30px;
+	 position: absolute;
+     top: 25%;
+     left: 50%;
+     margin-right: -50%;
+     transform: translate(-50%, -50%)
+	
+    }
+	
+  </style>
+ </head>
+ <body>
+ <div class="window">
+ <form action="\index.php" method="post">
+  <div class="container">
+    <p><b><h3>Для продолжения регистрации заполните необходимые поля</h3></b></p>
+    <br>
+
+    <label for="login"><b>Логин</b></label>
+    <input type="text" placeholder="Введите логин" pattern="^[A-Za-z]+[A-Za-z0-9_-]{3,15}$" title="Логин должен начинаться с заглавной буквы, состоять из латинских букв, цифр, либо символов '_' и '-'. Размером не менее 4 символов " maxlength='15' name="login" required>
+
+    <p><label for="password"><b>Пароль</b></label>
+    <input type="password"  placeholder="Введите пароль" pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{6,}$" title="Пароль должен быть не менее 6 символов, содержать хотя бы одну цифру и хотя бы одну заглавную букву и одну маленькую." maxlength='15' name="password" required></p>
+	
+	<p><label for="phone"><b>Телефон</b></label>
+	<input name="phone" type="phone" pattern="^((8|\+7)[\- ]?)[0-9]{10}$" placeholder="+7*** *** ** **" title="Номер должен содержать 11 цифр и начинаться с +7 или 8" maxlength='12' required></p>
+	 <br><br>
+	 <button><img src="\gal.jpg" style="vertical-align: middle" type="submit">Регистрация</button>
+	 <br>
+
+  
+
+  <div class="container signin">
+    <p>Уже существует аккаунт? <a href="#">Войти</a>.</p>
+  </div>
+  </body>
+  </html>
+</form>
