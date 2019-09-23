@@ -1,6 +1,4 @@
 <?php
-//print "ok";
-//exit();
 usleep(rand(1000000,2000000));
 /*
  * {
@@ -57,7 +55,8 @@ $database = "lrn";
 $link = mysqli_connect($host, $user, $password, $database)
 or die("Connection failed: " . mysqli_error($link));
 
-$q = "insert into 
+
+/*$q = "insert into
       cdr_accounts(
         agent,
         type,
@@ -74,9 +73,8 @@ $q = "insert into
         account_id,
         h323_call_id,
         connect_time,
-        
         number) 
-    values";
+    values";*/
 
 $parts = [];
 for ($i=0;$i<10000;$i++) {
@@ -86,7 +84,9 @@ for ($i=0;$i<10000;$i++) {
         $agent = rand(21, 10000);
     }
 
-    $types = ['incoming', 'forward', 'callback', 'outgoing'];
+    $type = ['incoming', 'forward', 'callback', 'outgoing'];
+    $rand_type = array_rand($type, 1);
+    $type = $type[$rand_type];
 
     $parts[] = sprintf("(
         %d,
@@ -95,58 +95,83 @@ for ($i=0;$i<10000;$i++) {
         '%s',
         '%s',
         '%s',
-        %d,
+        '%s',
+        '%s',
+         %d,
+        '%s',
+        '%s',
+        '%s',
+         %d,
+         %d,
         '%s',
         '%s'
+         
+        
     )",
         $agent,
-        rand(1,6),
-        date("Y-m-d H:i:s",time()-rand(1,126144000)),
-        date("Y-m-d H:i:s",time()-rand(1,126144000)),
-        sha1(microtime(true)."".rand(1,100)),
-        sha1(microtime(true)."".rand(1,100)),
-        rand(1,3600),
-        '7'.rand(800,999).str_pad(rand(0,9999999),7,'0', STR_PAD_LEFT),
-        rand(1,6)
+        $type,
+        $start_date = date("Y-m-d H:i:s",time()-rand(1,126144000)),
+        $finish_date = date("Y-m-d H:i:s",time()-rand(1,126144000)),
+        $cli = "78123057431",
+        $input_data = "json_decode(file_get_contents(php://input)",
+        $setup_time_ms = rand(0,1000),
+        $destination = 'Санкт-Петербург',
+        $customer_local_time = date("Y-m-d H:i:s",time()-rand(1,126144000)),
+        $call_id = sha1(microtime(true)."".rand(1,100)),
+        $charged_time = rand(1,3600),
+        $result = 'successful',
+        $account_id = '78122134112',
+        $h323_call_id = sha1(microtime(true)."".rand(1,100)),
+        $connect_time = date("Y-m-d H:i:s",time()-rand(1,126144000)),
+        $number = '7'.rand(800,999).str_pad(rand(0,9999999),7,'0', STR_PAD_LEFT)
     );
+
 
 //print $q;
 }
-
-$z = $db->exec(
-    $q.implode(',',$parts)
-);
+$query = "INSERT INTO table_ (Agent, type_, start_date, finish_date, cli, input_data, setup_time_ms, destination, customer_local_time, 
+call_id, charged_time, call_id, result, account_id, h323_conf_id, connect_time, number)
+VALUES( $agent,
+        $type,
+        $start_date,
+        $finish_date,
+        $cli,
+        $input_data,
+        $setup_time_ms,
+        $destination,
+        $customer_local_time,
+        $call_id,
+        $charged_time,
+        $result,
+        $account_id,
+        $h323_call_id,
+        $connect_time = date(\"Y-m-d H:i:s\",time()-rand(1,126144000)),
+        $number)";
+$stmt = mysqli_prepare($link, $query);
+//$stmt->bind_param("sss", $parts);
+/*$link->query("INSERT INTO table_ (Agent, type_, start_date, finish_date, cli, input_data, setup_time_ms, destination, customer_local_time,
+call_id, charged_time, call_id, result, account_id, h323_conf_id, connect_time, number)
+VALUES $parts");*/
+/*$z = mysqli_stmt_bind_param($stmt, "sss", $parts);
 
 if ($z>0){
     print "ok";
-}else{
-    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+}else {
     print "error";
+}*/
+
+//mysqli_stmt_execute($stmt);
 
 
-    $agent_length = rand(5,15);
+   /* $agent_length = rand(5,15);
     $agent_name = '';
     for($i=0;$i<$agent_length;$i++){
         $agent_name .= chr(ord('A')+rand(0,25));
-    }
+    }*/
 
 //$agent_name = substr(md5(rand(0,100).microtime(true)),0, rand(5,15));
 
-    $type_arr = array("forwarded", "incoming", "missed", "dialed","callback");
-    $type_rand = '';
+print $query."\n";
 
-    $type_rand = array_rand($type_arr, 1);
-    echo $type_rand;
-
-
-    die($type_rand);
-
-
-
-
-    $sql = "INSERT INTO table_ (Agent, type_, start_date, finish_date, cli, input_data, disconnect_cause, setup_time_ms, destination, used_quantity, customer_local_time, 
-call_id, charged_time, result, account_id, h323_conf_id, connect_time, cld, curr, charged)
-VALUES ($Agent, ";
-    $result = mysqli_query($link, $sql) or die ("Connection failed: " . mysqli_error($link));
-
-    mysqli_close($link);
+$result = mysqli_query($link, $query) or die ("Connection failed: " . mysqli_error($link));
+mysqli_close($link);
