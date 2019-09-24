@@ -22,14 +22,4 @@ if($test->countRows()<=0){
     //$test->getLastQuery();
 }
 
-$database -> $config;
-
-if ($database) {
-    $record_numbers = dbase_numrecords ($database);
-    for ($i = 1; $i <= $record_numbers; $i++) {
-        //выполнение каких-либо действий с записью
-    }
-}
-
-}
 //Конец
